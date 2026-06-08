@@ -61,12 +61,7 @@ with st.sidebar:
 
 
     # To choose the temperature and show it in the slider
-    temperature = st.slider(
-        "Temperature",
-        0.0,
-        1.0,
-        0.7
-    )
+    temperature = st.slider("Temperature",0.0,1.0,0.7)
 
 
     # To choose the summary length and show it in the dropdown menu
@@ -265,7 +260,10 @@ with tab2:
             st.warning("Please upload a document.")
         
         else:
-            st.write("Document uploaded successfully ✅")
-            st.write(f"File Name: {uploaded_file.name}")
-            st.write(f"File Type: {uploaded_file.type}")
-            st.write(f"Size: {uploaded_file.size / 1024:.2f} KB")
+           with st.container(border=True):
+
+            st.success("Document uploaded successfully ✅")
+
+            st.write(f"📄 File Name: {uploaded_file.name}")
+            st.write(f"📁 File Type: {uploaded_file.type}")
+            st.write(f"📊 Size: {uploaded_file.size / 1024:.2f} KB")
