@@ -155,6 +155,7 @@ if st.button("Analyze Document"):
                         - Do not omit critical information.
                         - Use clear headings where appropriate.
                         - Do not leave the summary unfinished.
+                        
                         Document:
                         {document_text}
                         """
@@ -162,7 +163,7 @@ if st.button("Analyze Document"):
         ],
                 options={
                     "temperature": 0.2,
-                    "num_predict": 2000, # set a high token limit to avoid the summary being cut off due to token limits.
+                    "num_predict": 2000 # set a high token limit to avoid the summary being cut off due to token limits.
                 }
         )
 
@@ -203,6 +204,7 @@ if st.button("Analyze Document"):
                             - Keep the rewritten version approximately the same length.
                             - Use headings or bullet points when appropriate.
                             - Do not leave the rewritten version unfinished.
+                            
 
                         Content:
                         {summary if rewrite_target == "Summary" else document_text}
@@ -225,11 +227,11 @@ if st.button("Analyze Document"):
 
 
 
-    # Display the summary and rewritten text in separate tabs
-    tab1, tab2 = st.tabs(["📄 Summary", "✍️ Rewritten"])
-    with tab1:
-        st.subheader("📄 Summary")
-        st.write(summary)
-    with tab2:
-        st.subheader("✍️ Rewritten Text")
-        st.write(rewritten_text)
+         # Display the summary and rewritten text in separate tabs
+        tab1, tab2 = st.tabs(["📄 Summary", "✍️ Rewritten"])
+        with tab1:
+                st.subheader("📄 Summary")
+                st.write(summary)
+        with tab2:
+                st.subheader("✍️ Rewritten Text")
+                st.write(rewritten_text)
