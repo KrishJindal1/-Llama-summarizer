@@ -1,7 +1,8 @@
 import streamlit as st
 import ollama
 from pypdf import PdfReader
-
+from docx import Document
+from pptx import Presentation
 # Added dictionary to store the temperature and instructions for each tone option
 tone_config = {
     "Professional": {
@@ -41,7 +42,7 @@ tone_config = {
 
 
 # Function to analyze the document, generate summary and rewrite based on the selected tone and rewrite target
-def analyze_document(document_text):
+def analyze_document(document_text,selected_model,temperature,tone,rewrite_target,target_length):
     with st.status("📄 Processing Document...", expanded=True) as status:
 
         st.write("Generating summary...")
@@ -140,7 +141,7 @@ def analyze_document(document_text):
             state="complete",
         )
 
-        # Display the summary and rewritten text in separate tabs
+    #Display the summary and rewritten text in separate tabs
     sum_tab1, rewrite_tab2 = st.tabs(["📄 Summary", "✍️ Rewritten"])
     with sum_tab1:
             st.subheader("📄 Summary")
@@ -163,6 +164,33 @@ def extract_pdf(uploaded_file):
         st.error(f"PDF Extraction Failed: {e}")
         return ""
 
+#Function to Exctract text from Docx files
+def extract_docx(uploaded_file):
+   try:
+    text = ""
+    doc = Document(uploaded_file)
+    for paragraph in doc.paragraphs:
+        text += paragraph.text + "\n"
+    return text
+   except Exception as e:
+        st.error(f"DOCX Extraction Failed: {e}")
+        return ""
+
+#Function to extract text from PPTX files
+def extract_pptx(uploaded_file):
+    try:
+        text = ""
+        prs = Presentation(uploaded_file)
+        for slide in prs.slides:
+            for shape in slide.shapes:
+                if hasattr(shape, "text"):
+                    text += shape.text + "\n"
+        return text
+    except Exception as e:
+        st.error(
+            f"PPTX Extraction Failed: {e}")
+        return ""
+
 # Function to show the preview of the extracted text from the uploaded document
 def show_preview(document_text):
    try:
@@ -173,6 +201,19 @@ def show_preview(document_text):
     )
    except Exception as e:
         st.error(f"Preview Generation Failed: {e}") 
+
+# Function to process the extracted text, show the preview and analyze the document based on the extracted text
+def process_extracted_text(document_text, file_type):
+    if document_text.strip():
+        st.success(
+            f"{file_type} extracted successfully ✅"
+        )
+        show_preview(document_text)
+        analyze_document(document_text, selected_model, temperature, tone, rewrite_target, target_length)
+    else:
+        st.error(
+            f"No text extracted from {file_type}"
+        )
 
 
 # side bar 
@@ -223,8 +264,6 @@ with st.sidebar:
         ]
     )
 
-
-    
     rewrite_target = st.selectbox(
     "Rewrite",
     [
@@ -261,7 +300,7 @@ with tab1:
             st.warning("Please enter a document.")
         
         else:
-            analyze_document(document_text)
+            analyze_document(document_text,selected_model,temperature,tone,rewrite_target,target_length)
 
 
 #File uploader to upload the document to be analyzed 
@@ -286,9 +325,6 @@ with tab2:
             try:
                 st.success("Document uploaded successfully ✅")
                 with st.expander("📄 Document Details"):
-
-                    st.success("Document uploaded successfully ✅")
-
                     st.write(f"📄 File Name: {uploaded_file.name}")
                     st.write(f"📁 File Type: {uploaded_file.type}")
                     st.write(
@@ -297,41 +333,29 @@ with tab2:
 
                 file_name = uploaded_file.name.lower()
             #For each file type, extract the text and then show the preview and analyze the document based on the extracted text.
-                if file_name.endswith(".txt"):
+                if file_name.endswith(".txt"):#for .txt
                     document_text = (
                         uploaded_file
                         .read()
                         .decode("utf-8")
                     )
-                    st.success(
-                        "Text extracted successfully ✅"
-                    )
-                    show_preview(document_text)
-                    analyze_document(document_text)
+                    process_extracted_text(document_text, "Text")
 
 
-                elif file_name.endswith(".pdf"):
+                elif file_name.endswith(".pdf"): #for .pdf
                      document_text = extract_pdf(uploaded_file)
-                     st.success(
-                        "PDF extracted successfully ✅"
-                    )
-                     show_preview(document_text)
-                     analyze_document(document_text)
+                     process_extracted_text(document_text, "PDF")
                      
 
 
-                elif file_name.endswith(".docx"):
-
-                    st.info(
-                        "DOCX extraction coming next."
-                    )
+                elif file_name.endswith(".docx"):#for .docx
+                    document_text = extract_docx(uploaded_file)
+                    process_extracted_text(document_text, "DOCX")
 
 
-                elif file_name.endswith(".pptx"):
-
-                    st.info(
-                        "PPTX extraction coming next."
-                    )
+                elif file_name.endswith(".pptx"):#for .pptx
+                    document_text = extract_pptx(uploaded_file)
+                    process_extracted_text(document_text, "PPTX")
 
 
                 else:
