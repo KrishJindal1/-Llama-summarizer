@@ -88,7 +88,7 @@ GenAi/
 ├── requirements.txt
 │
 ├── core/
-│   ├── __init__.py
+│   |
 │   ├── analyzer.py
 │   ├── extractor.py
 │   └── ollama_client.py
