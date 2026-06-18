@@ -1,56 +1,103 @@
-# 📄 AI Document Analyzer
+# Document Summarizer and Rewriter
 
-AI Document Analyzer is a Streamlit-based application that allows users to upload or paste documents, generate AI-powered summaries, and rewrite content in different tones using local Ollama models.
+## Overview
 
-## Features
+Document Summarizer and Rewriter is a Generative AI-powered application that analyzes documents and generates concise summaries and rewritten content in multiple communication styles. The application supports both a graphical user interface (GUI) through Streamlit and a command-line interface (CLI), providing flexibility for different user workflows.
 
-* Generate concise summaries of documents
-* Rewrite content in multiple tones:
-
-  * Professional
-  * Formal
-  * Casual
-  * Executive
-  * Technical
-  * Academic
-  * Marketing
-  * Simple English
-* Support for multiple file formats:
-
-  * PDF (.pdf)
-  * Word Documents (.docx)
-  * PowerPoint Presentations (.pptx)
-  * Text Files (.txt)
-* Adjustable summary length:
-
-  * Short (100–200 words)
-  * Medium (300–500 words)
-  * Long (700–1000 words)
-* Local AI inference using Ollama
-* Document preview before processing
-* Streamlit-based user interface
+This project was developed as part of a GenAI Internship Project.
 
 ---
 
-## Tech Stack
+## Features
+
+### Document Processing
+
+* Upload and analyze PDF documents
+* Upload and analyze DOCX documents
+* Upload and analyze PPTX documents
+* Upload and analyze TXT documents
+* Direct text input support
+
+### AI-Powered Summarization
+
+* Short Summary (100–200 words)
+* Medium Summary (300–500 words)
+* Long Summary (700–1000 words)
+* Preservation of key information and critical insights
+
+### Content Rewriting
+
+Supports multiple writing styles:
+
+* Professional
+* Formal
+* Casual
+* Executive
+* Technical
+* Academic
+* Marketing
+* Simple English
+
+### User Interfaces
+
+* Streamlit-based graphical interface
+* Command-line interface (CLI)
+
+### Local AI Processing
+
+* Uses locally hosted Ollama models
+* No dependency on cloud-based AI services
+* Improved privacy and control over document data
+
+---
+
+## Technology Stack
+
+### Frontend
+
+* Streamlit
+
+### Backend
 
 * Python
-* Streamlit
+
+### AI Framework
+
 * Ollama
-* PyPDF
+
+### Document Processing Libraries
+
+* pypdf
 * python-docx
 * python-pptx
+
+### Testing
+
+* pytest
+* unittest.mock
 
 ---
 
 ## Project Structure
 
 ```text
-project/
+GenAi/
 │
-├── main.py
-├── test_main.py
+├── app.py
+├── cli.py
 ├── requirements.txt
+│
+├── core/
+│   ├── __init__.py
+│   ├── analyzer.py
+│   ├── extractor.py
+│   └── ollama_client.py
+│
+├── tests/
+│   ├── test_analyzer.py
+│   ├── test_extractor.py
+│   └── test_ollama_client.py
+│
 └── README.md
 ```
 
@@ -58,87 +105,128 @@ project/
 
 ## Installation
 
-### 1. Clone the repository
+### Clone Repository
 
 ```bash
 git clone <repository-url>
-cd <project-folder>
+cd GenAi
 ```
 
-### 2. Install dependencies
+### Create Virtual Environment
+
+```bash
+python -m venv streamlit_env
+```
+
+### Activate Environment
+
+Linux/macOS:
+
+```bash
+source streamlit_env/bin/activate
+```
+
+Windows:
+
+```bash
+streamlit_env\Scripts\activate
+```
+
+### Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Install Ollama
+---
 
-Download and install Ollama from:
+## Running Ollama
 
-https://ollama.com
+Ensure Ollama is installed and running.
 
-### 4. Pull a model
-
-Example:
+View available models:
 
 ```bash
-ollama pull llama3
+ollama list
+```
+
+Example model:
+
+```bash
+llama3.2:3b
 ```
 
 ---
 
-## Running the Application
-
-Start the Streamlit application:
+## Running the Streamlit Application
 
 ```bash
-streamlit run main.py
+streamlit run app.py
 ```
 
-The application will open in your browser automatically.
+---
+
+## Running the CLI Application
+
+### Generate Summary
+
+```bash
+python cli.py summarize \
+--text "Machine learning is a subset of artificial intelligence." \
+--model llama3.2:3b \
+--length short
+```
+
+### Rewrite Content
+
+```bash
+python cli.py rewrite \
+--text "Machine learning is a subset of artificial intelligence." \
+--model llama3.2:3b \
+--tone Professional
+```
+
+### Analyze a Document
+
+```bash
+python cli.py summarize \
+--file-path sample.pdf \
+--model llama3.2:3b \
+--length medium
+```
 
 ---
 
 ## Running Tests
 
-Execute all test cases using pytest:
+Run all tests:
 
 ```bash
-pytest test_main.py
+python -m pytest
+```
+
+Verbose output:
+
+```bash
+python -m pytest -v
+```
+
+Coverage report:
+
+```bash
+python -m pytest --cov=core
 ```
 
 ---
 
-## How It Works
+## Future Enhancements
 
-1. User uploads a document or pastes text.
-2. Text is extracted from the document.
-3. The content is previewed.
-4. Ollama generates a summary based on the selected length.
-5. The summary or full document is rewritten in the selected tone.
-6. Results are displayed in separate tabs.
-
----
-
-## Supported Document Types
-
-| Format | Supported |
-| ------ | --------- |
-| PDF    | ✅         |
-| DOCX   | ✅         |
-| PPTX   | ✅         |
-| TXT    | ✅         |
-
----
-
-## Future Improvements
-
-* Export summary as PDF
-* Download rewritten content
-* Multiple model comparison
-* RAG-based document querying
-* OCR support for scanned PDFs
 * Batch document processing
+* Export summaries to DOCX and PDF
+* Processing history tracking
+* Additional language support
+* Advanced document analytics
+* RAG-based knowledge integration
 
 ---
 
@@ -147,4 +235,3 @@ pytest test_main.py
 Krish Jindal
 
 GenAI Internship Project
-
