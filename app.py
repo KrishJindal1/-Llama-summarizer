@@ -12,11 +12,8 @@ def analyze_document(document_text,selected_model,temperature,tone,rewrite_targe
         
         # Generate summary
         try:
-            summary = generate_summary(
-                document_text,
-                target_length,
-                selected_model,
-            )
+            summary = generate_summary(document_text,target_length,selected_model)
+
         except Exception as e:
             st.error(f"Summary Generation Failed: {e}")
             return
@@ -25,14 +22,8 @@ def analyze_document(document_text,selected_model,temperature,tone,rewrite_targe
         st.write("Generating rewritten content...")
         # Generate rewritten content using helper
         try:
-            rewritten_text = rewrite_content(
-                document_text,
-                summary,
-                tone,
-                temperature,
-                rewrite_target,
-                selected_model,
-            )
+            rewritten_text = rewrite_content(document_text,summary, tone,temperature,rewrite_target,selected_model)
+
         except Exception as e:
             st.error(f"Rewriting Failed: {e}")
             return
@@ -191,15 +182,7 @@ def app():
                     # and analyze the document based on the extracted text.
                     document_text = extract_text(uploaded_file, uploaded_file.name)
 
-                    process_extracted_text(
-                        document_text,
-                        uploaded_file.name,
-                        selected_model,
-                        temperature,
-                        tone,
-                        rewrite_target,
-                        target_length,
-                    )
+                    process_extracted_text( document_text, uploaded_file.name, selected_model, temperature, tone, rewrite_target, target_length)
 
                 except Exception as e:
 
