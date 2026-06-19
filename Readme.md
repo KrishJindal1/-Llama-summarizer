@@ -144,8 +144,11 @@ pip install -r requirements.txt
 
 Ensure Ollama is installed and running.
 
+To pull Model into local System:
+```bash
+ollama pull [Model Name]
+```
 View available models:
-
 ```bash
 ollama list
 ```
