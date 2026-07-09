@@ -38,9 +38,9 @@ tone_config = {
 
 #summary config for different lengths
 summary_config = {
-        "Short": "100-200 words",
-        "Medium": "300-500 words",
-        "Long": "700-1000 words"}
+        "Short": "100-120 words",
+        "Medium": "120-400 words",
+        "Long": "400-1000 words"}
 
 
 def generate_summary(document_text, target_length, selected_model):
